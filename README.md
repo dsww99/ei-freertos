@@ -8,7 +8,7 @@ Developed by the CSIRO Data61 'Embedded Intelligence' team
 ## Detailed Setup
 
 Refer to the following for getting set up.    
-https://csiro-wsn.github.io/platform-docs/getting_started/
+https://uqembeddedsys.github.io/csse4011-docs/getting_started/
 
 ## Software Setup
 
