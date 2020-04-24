@@ -17,6 +17,11 @@
 #include "rtc.h"
 #include "watchdog.h"
 
+#include "test_reporting.h"
+#include "tiny_printf.h"
+
+#include "device_nvm.h"
+
 #include "unified_comms_serial.h"
 
 /* Private Defines ------------------------------------------*/
@@ -67,6 +72,10 @@ void vApplicationStartupCallback(void)
 
 void vApplicationTickCallback(uint32_t ulUptime)
 {
+	tdf_uptime_t xUptime = {ulUptime};
+	eTdfAddMulti(BLE_LOG, TDF_UPTIME, TDF_TIMESTAMP_NONE, NULL, &xUptime);
+	eTdfFlushMulti(BLE_LOG);
+
 	xDateTime_t xDatetime;
 	bRtcGetDatetime(&xDatetime);
 	eRtcPrintDatetime(&xDatetime, LOG_APPLICATION, LOG_ERROR, "Time: ", "\r\n");
