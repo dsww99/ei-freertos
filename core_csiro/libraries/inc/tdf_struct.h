@@ -3181,11 +3181,17 @@ typedef struct tdf_heading {
 } ATTR_PACKED tdf_heading_t;
 #define TDF_HEADING_SIZE sizeof(tdf_heading_t)
 
-// Distance to a target in cm
-typedef struct tdf_range_cm {
-    uint16_t range; // Centimeters 
-} ATTR_PACKED tdf_range_cm_t;
-#define TDF_RANGE_CM_SIZE sizeof(tdf_range_cm_t)
+// Distance to a target in mm
+typedef struct tdf_range_mm {
+    uint16_t range; // Millimeters 
+} ATTR_PACKED tdf_range_mm_t;
+#define TDF_RANGE_MM_SIZE sizeof(tdf_range_mm_t)
+
+// Height above mean sea level
+typedef struct tdf_height_msl {
+    int16_t height; // Height in m 
+} ATTR_PACKED tdf_height_msl_t;
+#define TDF_HEIGHT_MSL_SIZE sizeof(tdf_height_msl_t)
 
 
 // clang-format on

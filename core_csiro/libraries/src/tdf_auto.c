@@ -18,7 +18,7 @@
 /* External Variables ---------------------------------------*/
 // clang-format off
 
-const uint8_t pucTdfStructLengths[476] = {
+const uint8_t pucTdfStructLengths[477] = {
     [TDF_BATTERY_VOLTAGE                    ] = 2,
     [TDF_BATTERY_CURRENT                    ] = 2,
     [TDF_SOLAR_VOLTAGE                      ] = 2,
@@ -486,7 +486,8 @@ const uint8_t pucTdfStructLengths[476] = {
     [TDF_3D_POSE                            ] = 6,
     [TDF_MAG_XYZ_SIGNED                     ] = 6,
     [TDF_HEADING                            ] = 2,
-    [TDF_RANGE_CM                           ] = 2,
+    [TDF_RANGE_MM                           ] = 2,
+    [TDF_HEIGHT_MSL                         ] = 2,
 };
 
 // clang-format on

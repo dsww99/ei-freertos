@@ -490,12 +490,13 @@ typedef enum eTdfIds {
     TDF_3D_POSE                             = 472,
     TDF_MAG_XYZ_SIGNED                      = 473,
     TDF_HEADING                             = 474,
-    TDF_RANGE_CM                            = 475,
+    TDF_RANGE_MM                            = 475,
+    TDF_HEIGHT_MSL                          = 476,
 } eTdfIds_t;
 
 /* External Variables ---------------------------------------*/
 
-extern const uint8_t pucTdfStructLengths[476];
+extern const uint8_t pucTdfStructLengths[477];
 
 // clang-format on
 #endif /* __CORE_CSIRO_LIBRARIES_TDF_AUTO */
