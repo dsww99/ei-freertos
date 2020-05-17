@@ -9,6 +9,8 @@ include $(CORE_CSIRO_DIR)/arch/nrf52/cpu/$(PLATFORM_CPU)/m_$(PLATFORM_CPU).mk
 # Platform Specific Peripheral Sources
 ##############################################################################
 
+CORE_CSIRO_SRCS	+= $(CORE_CSIRO_DIR)/peripherals/esp_wifi/src/esp_wifi.c
+
 ##############################################################################
 # Platform Specific Task Sources
 ##############################################################################

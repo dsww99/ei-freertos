@@ -37,6 +37,7 @@
 #define UART0_CTS_PIN		(xGpio_t){.ucPin = NRF_GPIO_PIN_MAP( 1, 2 )}
 #define UART0_RTS_PIN		(xGpio_t){.ucPin = NRF_GPIO_PIN_MAP( 1, 1 )}
 
+
 /* I2C */
 #define TWIM1 				1
 #define TWIM1_SDA_PIN		(xGpio_t){.ucPin = NRF_GPIO_PIN_MAP( 0, 26 )}
@@ -46,6 +47,11 @@
 #define WIFI_ENABLE_PIN  	(xGpio_t){.ucPin = NRF_GPIO_PIN_MAP( 0, 24 )}
 #define ESP_BOOT_MODE_PIN 	(xGpio_t){.ucPin = NRF_GPIO_PIN_MAP( 0, 16 )}
 #define ESP_HOST_WK_PIN 	(xGpio_t){.ucPin = NRF_GPIO_PIN_MAP( 0, 7 )}
+
+#define WIFI_RX_PIN		(xGpio_t){.ucPin = NRF_GPIO_PIN_MAP( 1, 4 )}
+#define WIFI_TX_PIN		(xGpio_t){.ucPin = NRF_GPIO_PIN_MAP( 1, 5 )}
+#define WIFI_CTS_PIN		(xGpio_t){.ucPin = NRF_GPIO_PIN_MAP( 1, 6 )}
+#define WIFI_RTS_PIN		(xGpio_t){.ucPin = NRF_GPIO_PIN_MAP( 1, 7 )}
 
 #define UART1				1
 #define UART1_RX_PIN        (xGpio_t){.ucPin = NRF_GPIO_PIN_MAP( 1, 3 )}        //D8

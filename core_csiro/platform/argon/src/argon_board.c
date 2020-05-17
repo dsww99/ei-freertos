@@ -39,6 +39,9 @@
 #include "unified_comms_gatt.h"
 #include "unified_comms_serial.h"
 
+/* Peripherals */
+#include "esp_wifi.h"
+
 /* Data Loggers */
 #include "bluetooth_logger.h"
 #include "serial_logger.h"
@@ -74,6 +77,7 @@ void prvBoardLoggersInit(void);
 
 /* Create UART Driver, 4 buffers of 128 bytes each, 64 byte receive stream */
 UART_MODULE_CREATE(SERIAL_OUTPUT, NRF_UARTE0, UARTE0_UART0_IRQHandler, UNUSED_IRQ, 4, 512, 64);
+UART_MODULE_CREATE(WIFI_UART, NRF_UARTE1, UARTE1_IRQHandler, UNUSED, 4, 512, 64);
 
 /* Create Watchdog Timer: The handler is assigned during initialisation, set to NULL as placeholder */
 WATCHDOG_MODULE_CREATE(WDT_IRQHandler, WDT_IRQn, NULL);
@@ -83,6 +87,7 @@ SPI_MODULE_CREATE(NRF52_SPI, SPI_INSTANCE, SPIM0_TWIM0_IRQHandler);
 
 xWatchdogModule_t *pxWatchdog = &WATCHDOG_MODULE_GET(WDT_IRQHandler);
 xUartModule_t *pxUartOutput = &UART_MODULE_GET(SERIAL_OUTPUT);
+xUartModule_t *pxSerialWifi   = &UART_MODULE_GET(WIFI_UART);
 xI2CModule_t *pxI2C = &I2C_MODULE_GET(NRF_I2C);
 xAdcModule_t *pxAdc = &ADC_MODULE_GET(ADC);
 xSpiModule_t *pxSpi = &SPI_MODULE_GET(NRF52_SPI);
@@ -102,6 +107,14 @@ xLEDConfig_t xLEDConfig = {
 	.xGreen = LED_2,
 	.xBlue = LED_3,
 	.xYellow = UNUSED_GPIO};
+
+/* ESP AT Structures */
+static xEspAtInit_t xEspAtInit = {
+	.pxUart		  = &UART_MODULE_GET(WIFI_UART),
+	.xEspEnable   = WIFI_ENABLE_PIN,
+	.xEspBootMode = ESP_BOOT_MODE_PIN,
+	.xEspHostWk   = ESP_HOST_WK_PIN,
+};
 
 xSerialModule_t *const pxSerialOutput = &xSerialOutput;
 
@@ -215,6 +228,12 @@ void prvBoardPinsInit(void)
 	/* Enable PCB Antenna, signals appear to be inverted from block diagram */
 	vGpioSetup(SKY13351_CTRL_1, GPIO_PUSHPULL, GPIO_PUSHPULL_LOW);
 	vGpioSetup(SKY13351_CTRL_2, GPIO_PUSHPULL, GPIO_PUSHPULL_HIGH);
+
+	/* Setup Wi-Fi Pins */
+	vGpioSetup(ESP_BOOT_MODE_PIN, GPIO_PUSHPULL, GPIO_PUSHPULL_LOW);
+	vGpioSetup(WIFI_ENABLE_PIN, GPIO_OPENDRAIN, GPIO_OPENDRAIN_LOW);
+	vGpioSetup(WIFI_RTS_PIN, GPIO_PUSHPULL, GPIO_PUSHPULL_HIGH);
+
 }
 
 /*-----------------------------------------------------------*/
@@ -265,6 +284,17 @@ void prvBoardNvmInit(void)
 
 void prvBoardInterfaceInit(void)
 {
+	
+	/* Setup the WiFi UART */
+	pxSerialWifi->xPlatform.pxTimer  = NRF_TIMER2;
+	pxSerialWifi->ulBaud			 = 115200;
+	pxSerialWifi->xPlatform.xRx		 = WIFI_RX_PIN;
+	pxSerialWifi->xPlatform.xTx		 = WIFI_TX_PIN;
+	pxSerialWifi->xPlatform.xRts	 = WIFI_RTS_PIN;
+	pxSerialWifi->xPlatform.xCts	 = WIFI_CTS_PIN;
+	// pxSerialWifi->ulTrailingWindowMs = 625; /* ulTrailingWindowMs = 12.5 x Mili Seconds  */
+
+
 	/* Setup the uart interface channel */
 	pxSpi->xPlatform.xMosi = SPIM0_MOSI_PIN;
 	pxSpi->xPlatform.xMiso = SPIM0_MISO_PIN;
@@ -277,6 +307,7 @@ void prvBoardInterfaceInit(void)
 	/* Initialise Interfaces */
 	vCrcInit();
 	vRtcInit();
+	eUartInit(pxSerialWifi, true);
 	eSpiInit(pxSpi);
 	eI2CInit(pxI2C);
 	vWatchdogInit(pxWatchdog);
@@ -330,6 +361,7 @@ void prvBoardBluetoothInit(void)
 
 void prvBoardPeripheralInit(void)
 {
+	vEspInit(&xEspAtInit);
 	return;
 }
 
